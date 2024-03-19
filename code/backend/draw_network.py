@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 import random
+import time
 
 
 def generate_special_graph(n, core_node_ratio=0.1, relay_node_ratio=0.3, avg_degree_core=5, avg_degree_relay=3, avg_degree_service=1, allow_self_loops=False):
@@ -11,9 +12,9 @@ def generate_special_graph(n, core_node_ratio=0.1, relay_node_ratio=0.3, avg_deg
     n (int): 图中节点总数。
     core_node_ratio (float, optional): 核心节点占总节点数的比例，默认为0.1。
     relay_node_ratio (float, optional): 中继节点占总节点数的比例，默认为0.3。
-    avg_degree_core (int, optional): 核心节点平均出度，默认为5。
-    avg_degree_relay (int, optional): 中继节点平均出度，默认为3。
-    avg_degree_service (int, optional): 服务节点平均出度，默认为1。
+    avg_degree_core (int, optional): 核心节点平均出度（只针对中继节点），默认为5。
+    avg_degree_relay (int, optional): 中继节点平均出度（针对核心节点和服务节点），默认为3。
+    avg_degree_service (int, optional): 服务节点平均出度（仅用于统计中继节点连接服务节点的数量，核心节点不与服务节点直接相连），默认为1。
     allow_self_loops (bool, optional): 是否允许自环，默认为False。
 
     返回:
@@ -35,43 +36,84 @@ def generate_special_graph(n, core_node_ratio=0.1, relay_node_ratio=0.3, avg_deg
 
     # 为各类型节点添加合适的出边
     degrees = {"core": avg_degree_core, "relay": avg_degree_relay, "service": avg_degree_service}
-    for node in G.nodes():
-        node_type = G.nodes[node]["type"]
-        for _ in range(degrees[node_type]):
+
+    # 核心节点仅连接中继节点
+    for core_node in range(core_count):
+        for _ in range(degrees["core"]):
             while True:
-                target = random.randint(0, n-1)
-                if node != target or allow_self_loops:  # 避免自环或根据allow_self_loops选择是否允许自环
-                    if not G.has_edge(node, target):  # 避免重复边
-                        G.add_edge(node, target)
+                target = random.randint(core_count, n-1)  # 确保目标节点是中继或服务节点
+                if G.nodes[target]["type"] == "relay" and (core_node != target or allow_self_loops):
+                    if not G.has_edge(core_node, target):
+                        G.add_edge(core_node, target)
                         break
+
+    # 中继节点可以连接核心节点和服务节点
+    for relay_node in range(core_count, core_count + relay_count):
+        for _ in range(degrees["relay"]):
+            node_type_to_connect = random.choices(["core", "service"], weights=[core_count, service_count])[0]
+            if node_type_to_connect == "core":
+                valid_targets = list(range(core_count))
+            else:
+                valid_targets = list(range(core_count + relay_count, n))
+
+            while True:
+                target = random.choice(valid_targets)
+                if (relay_node != target or allow_self_loops) and not G.has_edge(relay_node, target):
+                    G.add_edge(relay_node, target)
+                    break
 
     return G
 
 
-def draw_graph(G):
+
+def draw_graph(G, k=0.2, scale=20):
     """
-    绘制无向图G并显示图形。
+    绘制无向图G并显示图形，核心节点的连边更粗，非核心节点及其边颜色更淡。
 
     参数:
     G (networkx.Graph): 待绘制的无向图。
+    k (float): 用于布局算法中的节点间距离控制，默认值为0.2。
+    scale (int): 用于布局算法中的全局缩放因子，默认值为20。
+
+    返回值:
+    无
     """
-    # 使用nx.draw进行基本绘图
-    pos = nx.spring_layout(G)  # 使用spring布局算法生成节点位置
-    nx.draw(G, pos, with_labels=True)
+    plt.figure(figsize=(20, 20))
+    # 使用spring_layout布局算法确定节点位置，可通过调整k和scale参数影响节点间的距离和分布
+    pos = nx.spring_layout(G, k=k, scale=scale)
 
-    # 或者，如果您想要使用更丰富的样式选项，可以使用nx.draw_networkx
-    # 注意：通常只需选择一种绘图方式即可
-    # pos = nx.kamada_kawai_layout(G)  # 可以尝试其他布局算法
-    # nx.draw_networkx(G, pos, with_labels=True, font_size=10, node_color='lightblue', edge_color='gray')
+    # 定义不同类别节点间边的宽度及节点颜色
+    edge_widths = {("core", "core"): 6, ("core", "relay"): 4, ("core", "service"): 2,
+                   ("relay", "relay"): 1.5, ("relay", "service"): 1.5, ("service", "service"): 1}
+    node_colors = {"core": 'r', "relay": 'orange', "service": 'lightblue'}
 
-    # 显示图形
+    # 根据定义的颜色和宽度绘制节点和边，并设置节点透明度
+    nx.draw_networkx_nodes(G, pos, node_color=[node_colors[node[1]["type"]] for node in G.nodes(data=True)], alpha=0.7)
+    nx.draw_networkx_edges(G, pos, width=[edge_widths[(G.nodes[edge[0]]["type"], G.nodes[edge[1]]["type"])]
+                                          for edge in G.edges()], alpha=0.7)
+
+    # 添加节点标签
+    nx.draw_networkx_labels(G, pos, font_size=10)
+
+    # 显示绘制的图形
     plt.show()
 
 
 # 示例
-X = generate_special_graph(50)
-draw_graph(X)
+X = generate_special_graph(100)
 
+for k in range(1, 40, 2):
+    draw_graph(X, k=k/10)
+    # 睡眠一秒钟
+    time.sleep(0.6)
+
+"""
+# 对scale做同样的遍历操作
+for scale in range(10, 100, 10):
+    draw_graph(X, scale=scale)
+    # 睡眠一秒钟
+    time.sleep(1)
+"""
 
 
 print("end")
