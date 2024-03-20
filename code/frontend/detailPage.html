@@ -35,15 +35,17 @@
                 <div class="name-title tile-size-color">
                     title2
                 </div>
-
-
             </div>
         </div>
         <!-- 中部栏，展示故障设备区域分布情况和故障时段分布 -->
         <div class="main-middle">
-            <!-- 故障设备区域分布情况区块 -->
+            <div class="instrument_detail">
 
-            <!-- 故障时段分布区块 -->
+            </div>
+            <div class="tree_parent">
+                {{ MainMap|safe }}
+            </div>
+
         </div>
         <!-- 右侧栏，展示优秀区域排名和故障类型分布 -->
         <div class="main-right">

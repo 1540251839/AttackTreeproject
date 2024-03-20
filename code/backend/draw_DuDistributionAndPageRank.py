@@ -32,3 +32,17 @@ plt.scatter(PageRankLstSample.values(), PageRankLstSample.keys(), s=10, c='b', m
 plt.xlabel('Frequency')
 plt.ylabel('Degree or PageRankValue')
 plt.show()
+
+# 现在对DuList和PageRankLst画折线图进行可视化
+SumLst = []
+for index, i in enumerate(DuList):
+    SumLst.append([i, PageRankLst[index]])
+# 现在基于SumLst中的每个列表子元素的第一项对其进行排序
+SumLst.sort(key=lambda x: x[0])
+# 现在对SumLst中的元素进行可视化，画出两条折线图
+plt.plot([i[1] for i in SumLst], c='r', label='PageRankValue')
+plt.plot([i[0] for i in SumLst], c='b', label='Degree')
+plt.xlabel('Index')
+plt.ylabel('Value')
+plt.legend()
+plt.show()

@@ -64,6 +64,22 @@ body{
     height: 100%;
     padding: 0 5px;
 }
+.tree_parent{
+	height: 74%;
+	overflow: auto; /* 添加滚动条以容纳超出部分 */
+    max-width: 100%; /* 可根据需要设置最大宽度 */
+	padding-right: 20px; /* 可添加内边距避免内容紧贴右侧边界 */
+}
+.instrument_detail{
+    margin-top: 10px;
+    padding: 15px; /* 添加内边距以增加内容区域空间 */
+    border: 2px solid rgba(40, 171, 194, 0.8); /* 使用半透明颜色和更宽的边框 */
+    border-radius: 8px; /* 添加圆角以美化边框样式 */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 添加微妙阴影效果 */
+    height: 26%;
+    overflow: auto; /* 防止内容溢出 */
+}
+
 
 
 .border-container {
@@ -71,6 +87,7 @@ body{
     margin-top: 10px;
    /* padding: 10px;*/
     border: 1px solid rgb(40, 171, 194);
+	border-radius: 8px; /* 添加圆角以美化边框样式 */
 }
 .main-middle .borderno-container{
 	border-top: none;
