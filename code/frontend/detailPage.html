@@ -19,23 +19,9 @@
     <!--主体-->
     <!-- 主容器，包含页面的主要布局 -->
     <div class="main clearfix">
-        <!-- 左侧栏，展示设备状态和设备类型分布 -->
         <div class="main-left">
-            <!-- 设备状态区块 -->
-            <div class="border-container containertop">
-                <h5 class="name-title tile-size-color">
-                    title1
-                </h5>
-                <!-- 设备状态详细信息和图表展示 -->
 
-            </div>
 
-            <!-- 设备类型分布区块 -->
-            <div class="border-container containerbottom">
-                <div class="name-title tile-size-color">
-                    title2
-                </div>
-            </div>
         </div>
         <!-- 中部栏，展示故障设备区域分布情况和故障时段分布 -->
         <div class="main-middle">
@@ -52,18 +38,21 @@
             <!-- 优秀区域排名区块 -->
             <div class="border-container containertop">
                 <div class="name-title tile-size-color">
-                    title3
+                    各攻击序列的成功概率
                 </div>
-                <!-- 优秀区域排名图表 -->
+                 <div class="centered-content">
+                    {{ mult|safe }}
+                </div>
 
             </div>
             <!-- 故障类型分布区块 -->
             <div class="border-container containerbottom">
                 <div class="name-title tile-size-color">
-                    title4
+                    各攻击序列的安全威胁
                 </div>
-                <!-- 故障类型分布雷达图 -->
-
+                <div class="centered-content">
+                    {{ table|safe }}
+                </div>
 
             </div>
         </div>

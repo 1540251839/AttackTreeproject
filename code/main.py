@@ -1,6 +1,11 @@
 from flask import Flask, render_template
 from utils.pathConfig import *
 from generate_plot.treeMap import *
+from generate_plot.barPlot import *
+from generate_plot.scatterPlot import *
+from generate_plot.sunBurst import *
+from generate_plot.multiCharts import *
+from generate_plot.generate_table import *
 from jinja2 import Markup, Environment, FileSystemLoader
 app = Flask(__name__, template_folder=frontEndPath, static_folder=frontEndPath)  # 开头必写，创建一个Flask对象从而进行后续操作
 app.config["SECRET_KEY"] = "ABCDFWA"  # 为防CSRF提供一个密匙
@@ -8,10 +13,20 @@ app.config["SECRET_KEY"] = "ABCDFWA"  # 为防CSRF提供一个密匙
 
 @app.route('/')
 def hello_world():
-    c = generateTreeMap(flare_path=dataPoolPath)
+    TreeMap = generateTreeMap(flare_path=dataPoolPath)
+    barPlot1 = generateBarPlot()
+    scatterPlot = generate_scatter_plot()
+    sunBurst = generateSunBurst()
+    mult = generate_muti()
+    table = generate_table()
     return render_template(
         'detailPage.html',
-        MainMap=c.render_embed()
+        MainMap=TreeMap.render_embed(),
+        BarPlot1=barPlot1.render_embed(),
+        scatterPlot=scatterPlot.render_embed(),
+        sunBurst=sunBurst.render_embed(),
+        mult=mult.render_embed(),
+        table=table.render_embed()
     )
 
 

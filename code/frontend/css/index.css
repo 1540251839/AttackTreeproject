@@ -49,11 +49,17 @@ body{
 }
 
 
-.main-left,
+.main-left{
+    /* 将左侧和右侧栏设置为浮动布局，宽度为28%，高度为100%，并添加内边距 */
+    float: left;
+    width: 5%;
+    height: 100%;
+    padding: 0 5px;
+}
 .main-right{
     /* 将左侧和右侧栏设置为浮动布局，宽度为28%，高度为100%，并添加内边距 */
     float: left;
-    width: 28%;
+    width: 50%;
     height: 100%;
     padding: 0 5px;
 }
@@ -65,7 +71,7 @@ body{
     padding: 0 5px;
 }
 .tree_parent{
-	height: 74%;
+	height: 70%;
 	overflow: auto; /* 添加滚动条以容纳超出部分 */
     max-width: 100%; /* 可根据需要设置最大宽度 */
 	padding-right: 20px; /* 可添加内边距避免内容紧贴右侧边界 */
@@ -76,11 +82,26 @@ body{
     border: 2px solid rgba(40, 171, 194, 0.8); /* 使用半透明颜色和更宽的边框 */
     border-radius: 8px; /* 添加圆角以美化边框样式 */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 添加微妙阴影效果 */
-    height: 26%;
+    height: 30%;
     overflow: auto; /* 防止内容溢出 */
 }
 
 
+.border-container {
+  /* 添加以下样式以确保父容器具有足够的高度 */
+  position: relative;
+}
+
+.centered-content {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* 如果需要，为内容设置最大宽度并使其自适应居中 */
+  max-width: 100%;
+  width: fit-content;
+  margin: auto;
+}
 
 .border-container {
     position: relative;
