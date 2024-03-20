@@ -5,7 +5,7 @@ from generate_plot.barPlot import *
 from generate_plot.scatterPlot import *
 from generate_plot.sunBurst import *
 from generate_plot.multiCharts import *
-from generate_plot.generate_table import *
+from generate_plot.liquid import *
 from jinja2 import Markup, Environment, FileSystemLoader
 app = Flask(__name__, template_folder=frontEndPath, static_folder=frontEndPath)  # 开头必写，创建一个Flask对象从而进行后续操作
 app.config["SECRET_KEY"] = "ABCDFWA"  # 为防CSRF提供一个密匙
@@ -18,7 +18,8 @@ def hello_world():
     scatterPlot = generate_scatter_plot()
     sunBurst = generateSunBurst()
     mult = generate_muti()
-    table = generate_table()
+    mult2 = generate_muti_reverse()
+    liquid = generate_liquid()
     return render_template(
         'detailPage.html',
         MainMap=TreeMap.render_embed(),
@@ -26,7 +27,8 @@ def hello_world():
         scatterPlot=scatterPlot.render_embed(),
         sunBurst=sunBurst.render_embed(),
         mult=mult.render_embed(),
-        table=table.render_embed()
+        mult2=mult2.render_embed(),
+        liquid=liquid.render_embed()
     )
 
 

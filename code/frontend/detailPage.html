@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
     <meta name="renderer" content="webkit">
-
+    <title>设备详情页</title>
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.4.4.min.js') }}"></script>
@@ -14,19 +14,44 @@
 <body>
 <div class="background">
     <div class="header">
-        <h1>XXX system</h1>
+        <h1>X号设备</h1>
     </div>
     <!--主体-->
     <!-- 主容器，包含页面的主要布局 -->
     <div class="main clearfix">
         <div class="main-left">
+            <div class="menu">
 
+            </div>
 
         </div>
         <!-- 中部栏，展示故障设备区域分布情况和故障时段分布 -->
         <div class="main-middle">
-            <div class="instrument_detail">
-
+            <div class="detail_container">
+                <div class="instrument_detail">
+                    <div class="detail_section">
+                        <h3>设备名称</h3>
+                        <p>设备1</p>
+                    </div>
+                    <div class="detail_section">
+                        <h3>设备类别</h3>
+                        <p>类别1</p>
+                    </div>
+                    <div class="detail_section">
+                        <h3>设备状态</h3>
+                        <p>状态1</p>
+                    </div>
+                    <div class="detail_section">
+                        <h3>设备防护建议</h3>
+                        <p>建议1建议1建建议1建议1建议1建议1建议1建议1建议1建议1建议1建议1建议1议1</p>
+                    </div>
+                </div>
+                <div class="liquid_graph">
+                    <div style="text-align: left;color: white;font-size: 20px">
+                    该设备拓扑重要度排名比例
+                    </div>
+                    {{ liquid|safe }}
+                </div>
             </div>
             <div class="tree_parent">
                 {{ MainMap|safe }}
@@ -38,9 +63,9 @@
             <!-- 优秀区域排名区块 -->
             <div class="border-container containertop">
                 <div class="name-title tile-size-color">
-                    各攻击序列的成功概率
+                    各攻击场景的成功概率与威胁程度
                 </div>
-                 <div class="centered-content">
+                <div class="centered-content">
                     {{ mult|safe }}
                 </div>
 
@@ -48,10 +73,10 @@
             <!-- 故障类型分布区块 -->
             <div class="border-container containerbottom">
                 <div class="name-title tile-size-color">
-                    各攻击序列的安全威胁
+                    各攻击序列成功概率与威胁程度
                 </div>
                 <div class="centered-content">
-                    {{ table|safe }}
+                    {{ mult2|safe }}
                 </div>
 
             </div>

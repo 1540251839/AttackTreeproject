@@ -1,24 +1,13 @@
 import pyecharts.options as opts
 from pyecharts.charts import Bar, Line
+from pyecharts.faker import Faker
 
 x_data = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
-
-"""
-.set_global_opts(
-            xaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True), axislabel_opts=opts.LabelOpts(color="white")),
-            yaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True), axislabel_opts=opts.LabelOpts(color="white")),
-        )
-        .set_series_opts(
-            label_opts=opts.LabelOpts(color="white"),  # 数据标签颜色
-            legend_text_color="white",  # 图例文字颜色
-            tooltip_opts=opts.TooltipOpts(is_show=True, formatter="{b}: {c}"),
-        )
-"""
 
 
 def generate_muti():
     bar = (
-        Bar()
+        Bar(init_opts=opts.InitOpts(width="800px", height="440px"))
         .add_xaxis(xaxis_data=x_data)
         .add_yaxis(
             series_name="蒸发量",
@@ -37,7 +26,7 @@ def generate_muti():
                 min_=0,
                 max_=25,
                 interval=5,
-                axislabel_opts=opts.LabelOpts(formatter="{value} °C"),
+                axislabel_opts=opts.LabelOpts(formatter="{value} °C", color='white'),
             )
         )
         .set_global_opts(
@@ -79,4 +68,22 @@ def generate_muti():
     )
 
     bar.overlap(line)
+    return bar
+
+
+def generate_muti_reverse():
+    bar = (
+        Bar(init_opts=opts.InitOpts(width="800px", height="400px"))
+        .add_xaxis(Faker.choose())
+        .add_yaxis("商家A", Faker.values())
+        .add_yaxis("商家B", Faker.values())
+        .reversal_axis()
+        .set_series_opts(label_opts=opts.LabelOpts(position="right"))
+        .set_global_opts(
+            xaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True),
+                                     axislabel_opts=opts.LabelOpts(color="white")),
+            yaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True),
+                                     axislabel_opts=opts.LabelOpts(color="white")),
+        )
+    )
     return bar

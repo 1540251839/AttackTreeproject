@@ -1,294 +1,428 @@
 @charset "utf-8";
 /*通用样式ͨ*/
-body,html,.main{
-	height: 91%;
-	width: 100%;
+body, html, .main {
+    height: 91%;
+    width: 100%;
 }
-.background{
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	z-index: 0;
-	top: 0;
-	left: 0;
-	background-size: cover;
-	background: linear-gradient(to bottom right, #000000, rgba(70, 6, 130, 1), #000000) no-repeat center
+
+.background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background: linear-gradient(to bottom right, #000000, rgba(70, 6, 130, 1), #000000) no-repeat center
 }
+
 .header {
-	width: 100%;
-	height: 8%; /* 根据需求调整高度 */
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: relative; /* 添加相对定位 */
-	z-index: 1; /* 设置z轴顺序为1 */
-	padding-top: 5px;
+    width: 100%;
+    height: 8%; /* 根据需求调整高度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* 添加相对定位 */
+    z-index: 1; /* 设置z轴顺序为1 */
+    padding-top: 5px;
     font-size: 18px;
     text-align: center;
     background: url(../bg.png) top center no-repeat;
 }
+
 .header h1 {
-	margin: 0;
-	font-size: 24px; /* 标题字号自定义 */
-	color: #ffffff; /* 字体颜色自定义 */
+    margin: 0;
+    font-size: 24px; /* 标题字号自定义 */
+    color: #ffffff; /* 字体颜色自定义 */
 }
-body,ul,li,p,h1,h2,h3,h4,h5,h6,dl,dt,dd,ol{
-    margin:0;
-    padding:0;
+
+body, ul, li, p, h1, h2, h3, h4, h5, h6, dl, dt, dd, ol {
+    margin: 0;
+    padding: 0;
 }
-ul, li,ol{
+
+ul, li, ol {
     list-style: none;
 }
+
 a:link,
 a:visited,
 a:active {
     text-decoration: none;
 }
-body{
+
+body {
     background: #040f3c;
 }
 
 
-.main-left{
+.main-left {
     /* 将左侧和右侧栏设置为浮动布局，宽度为28%，高度为100%，并添加内边距 */
     float: left;
     width: 5%;
     height: 100%;
     padding: 0 5px;
 }
-.main-right{
+
+.main-right {
     /* 将左侧和右侧栏设置为浮动布局，宽度为28%，高度为100%，并添加内边距 */
     float: left;
     width: 50%;
     height: 100%;
     padding: 0 5px;
 }
-.main-middle{
+
+.main-middle {
     /* 设置中间栏为浮动布局，宽度为44%，高度为100%，并添加内边距 */
     float: left;
     width: 44%;
     height: 100%;
     padding: 0 5px;
 }
-.tree_parent{
-	height: 70%;
-	overflow: auto; /* 添加滚动条以容纳超出部分 */
+
+.tree_parent {
+    height: 55%;
+    overflow: auto; /* 添加滚动条以容纳超出部分 */
     max-width: 100%; /* 可根据需要设置最大宽度 */
-	padding-right: 20px; /* 可添加内边距避免内容紧贴右侧边界 */
+    padding-right: 20px; /* 可添加内边距避免内容紧贴右侧边界 */
 }
-.instrument_detail{
+
+.instrument_detail {
     margin-top: 10px;
     padding: 15px; /* 添加内边距以增加内容区域空间 */
     border: 2px solid rgba(40, 171, 194, 0.8); /* 使用半透明颜色和更宽的边框 */
     border-radius: 8px; /* 添加圆角以美化边框样式 */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 添加微妙阴影效果 */
-    height: 30%;
+    height: 380px; /* 修改高度为固定值，例如300像素 */
+    width: 60%;
+    overflow-y: auto; /* 当内容在垂直方向溢出时显示滚动条 */
+}
+
+
+.menu {
+    margin-top: 10px;
+    padding: 15px; /* 添加内边距以增加内容区域空间 */
+    border: 2px solid rgba(40, 171, 194, 0.8); /* 使用半透明颜色和更宽的边框 */
+    border-radius: 8px; /* 添加圆角以美化边框样式 */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 添加微妙阴影效果 */
+    height: 99%;
+    width: 100%;
     overflow: auto; /* 防止内容溢出 */
 }
 
 
 .border-container {
-  /* 添加以下样式以确保父容器具有足够的高度 */
-  position: relative;
+    /* 添加以下样式以确保父容器具有足够的高度 */
+    position: relative;
 }
 
 .centered-content {
-  position: absolute;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* 如果需要，为内容设置最大宽度并使其自适应居中 */
-  max-width: 100%;
-  width: fit-content;
-  margin: auto;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 如果需要，为内容设置最大宽度并使其自适应居中 */
+    max-width: 100%;
+    width: fit-content;
+    margin: auto;
 }
 
 .border-container {
     position: relative;
     margin-top: 10px;
-   /* padding: 10px;*/
+    /* padding: 10px;*/
     border: 1px solid rgb(40, 171, 194);
-	border-radius: 8px; /* 添加圆角以美化边框样式 */
+    border-radius: 8px; /* 添加圆角以美化边框样式 */
 }
-.main-middle .borderno-container{
-	border-top: none;
-	border-bottom: none;
+
+.main-middle .borderno-container {
+    border-top: none;
+    border-bottom: none;
 }
-.name-title{  
+
+.name-title {
     background: #4545e3;
     padding: 10px 16px;
-    border-bottom-right-radius:8px;
-    border-bottom-left-radius:8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
     position: absolute;
     left: 7%;
-    
+
 }
-.tile-size-color{
-	font-size:16px ;
+
+.tile-size-color {
+    font-size: 16px;
     color: #fff;
 }
-.containertop{
-	height: 50%;
+
+.containertop {
+    height: 50%;
 }
-.containerbottom{
-	height: 47%;
+
+.containerbottom {
+    height: 47%;
 }
-#radar,.graduateyear,.bar-chart,#courserate,.line-chart,.bars-chart,.radar-chart,.progress1-chart,#mapadd,
-.progress2-chart{
-	height: 100%;
+
+#radar, .graduateyear, .bar-chart, #courserate, .line-chart, .bars-chart, .radar-chart, .progress1-chart, #mapadd,
+.progress2-chart {
+    height: 100%;
 }
-#mapadd{
-	position:relative;
+
+#mapadd {
+    position: relative;
 }
-#radar .radarkong{
-	height: 17%;
-	position: relative;
+
+#radar .radarkong {
+    height: 17%;
+    position: relative;
 }
-.Totalequipment{
-	margin-right: 18px;
+
+.Totalequipment {
+    margin-right: 18px;
 }
-#radar .radarkong p{
-	position: absolute;
-	bottom: 0;
-	text-align: center;
-	width: 100%;
-	
+
+#radar .radarkong p {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+
 }
-.SiteStatusList{
-	position: absolute;
-	bottom: 10%;
-	color: #fff;
-	font-size: 12px;
-	width: 100%;
-	display: flex;
+
+.SiteStatusList {
+    position: absolute;
+    bottom: 10%;
+    color: #fff;
+    font-size: 12px;
+    width: 100%;
+    display: flex;
     justify-content: center;
     flex-direction: row;
     align-items: center;
 }
-.SiteStatusList li:first-child{
-	margin-left: 22px;
+
+.SiteStatusList li:first-child {
+    margin-left: 22px;
 }
-.SiteStatusList li{
-	margin-right: 20px;
+
+.SiteStatusList li {
+    margin-right: 20px;
 }
-.SiteStatusList .Statussame{
-	float: left;
+
+.SiteStatusList .Statussame {
+    float: left;
     padding: 5px;
     margin-top: 2px;
     margin-right: 5px;
-	
+
 }
-.SiteStatusList .Statusnormal{
-	background: #4f8bf9;
+
+.SiteStatusList .Statusnormal {
+    background: #4f8bf9;
 }
-.SiteStatusList .Statusemergency{
-	background: #fea31e;
+
+.SiteStatusList .Statusemergency {
+    background: #fea31e;
 }
-.SiteStatusList .StatusOffline{
-	background: #959595;
+
+.SiteStatusList .StatusOffline {
+    background: #959595;
 }
-.SiteStatusList .ThisweekData,.SiteStatusList .ThisweekData{
-	padding: 7px;
-	border-radius: 50%;
-	float: left;
-	cursor: pointer;
+
+.SiteStatusList .ThisweekData, .SiteStatusList .ThisweekData {
+    padding: 7px;
+    border-radius: 50%;
+    float: left;
+    cursor: pointer;
 }
-.SiteStatusList .Datasame{
-	background: #39c1f5;
+
+.SiteStatusList .Datasame {
+    background: #39c1f5;
 }
-.SiteStatusList .Defaultgray{
-	color: #959595;
+
+.SiteStatusList .Defaultgray {
+    color: #959595;
 }
-.SiteStatusList .DataSwitch{
-	background: #555474;
+
+.SiteStatusList .DataSwitch {
+    background: #555474;
     border-radius: 10px;
 }
-.teacher-pie,.teacher-pie .teacherList{
-	height: 100%;
+
+.teacher-pie, .teacher-pie .teacherList {
+    height: 100%;
 }
-.teacher-pie .teacherList{
+
+.teacher-pie .teacherList {
     border: 1px solid #24214e;
     position: relative;
 }
-.teacher-pie .teacherList:first-child{
-	width: 50%;
-	border-left: none;
-	float: left;
+
+.teacher-pie .teacherList:first-child {
+    width: 50%;
+    border-left: none;
+    float: left;
 }
-.teacher-pie .teacherList .name-title{
-    padding-left:10px ;
+
+.teacher-pie .teacherList .name-title {
+    padding-left: 10px;
 }
-.teacher-pie .teacherList:last-child{
-	width: 49%;
+
+.teacher-pie .teacherList:last-child {
+    width: 49%;
     border-right: none;
     float: right;
 }
 
-.number-show{
+.number-show {
     position: absolute;
     top: 20%;
     right: 5%;
 }
-#mapadd .mapleft{
-	width: 33%;
-	height: 100%;
-	float: left;
-	position: relative;
-	/*background: #009688;*/
+
+#mapadd .mapleft {
+    width: 33%;
+    height: 100%;
+    float: left;
+    position: relative;
+    /*background: #009688;*/
 }
-#mapadd .progressMore{
-	color: #fff;
-	font-size: 12px;
-	position: absolute;
-	right: 7%;
-	top: 60%;
-	text-decoration: underline;
+
+#mapadd .progressMore {
+    color: #fff;
+    font-size: 12px;
+    position: absolute;
+    right: 7%;
+    top: 60%;
+    text-decoration: underline;
 }
-#mapadd .map-chart{
-	width: 65%;
-	height: 100%;
-	float: left;
+
+#mapadd .map-chart {
+    width: 65%;
+    height: 100%;
+    float: left;
 }
-#mapadd .Devicestatus-List{
-	width: 50%;
-	position: absolute;
-	bottom: 12%;
+
+#mapadd .Devicestatus-List {
+    width: 50%;
+    position: absolute;
+    bottom: 12%;
     left: 4%;
     color: #fff;
 }
-#mapadd .Devicestatus-List li{
-	float: left;
-	height: 35px;
-	margin-right: 1%;
-	line-height: 35px;
-	position: relative;
+
+#mapadd .Devicestatus-List li {
+    float: left;
+    height: 35px;
+    margin-right: 1%;
+    line-height: 35px;
+    position: relative;
 }
-#mapadd .Devicestatus-List li:nth-of-type(1){
-	width: 65.5%;
-	border: 1px solid #3ae034;
-	background: rgba(58,224,52,0.5);
+
+#mapadd .Devicestatus-List li:nth-of-type(1) {
+    width: 65.5%;
+    border: 1px solid #3ae034;
+    background: rgba(58, 224, 52, 0.5);
 }
-#mapadd .Devicestatus-List li:nth-of-type(2){
-	width: 10.5%;
-	border: 1px solid #778699;
-	background: rgba(199,134,153,0.5);
+
+#mapadd .Devicestatus-List li:nth-of-type(2) {
+    width: 10.5%;
+    border: 1px solid #778699;
+    background: rgba(199, 134, 153, 0.5);
 }
-#mapadd .Devicestatus-List li:nth-of-type(3){
-	width: 10.5%;
-	border: 1px solid #1b9fff;
-	background: rgba(27,159,255,0.5);
+
+#mapadd .Devicestatus-List li:nth-of-type(3) {
+    width: 10.5%;
+    border: 1px solid #1b9fff;
+    background: rgba(27, 159, 255, 0.5);
 }
-#mapadd .Devicestatus-List li:nth-of-type(4){
-	width: 9.5%;
-	border: 1px solid #e77407;
-	background: rgba(213,116,7,0.5);
+
+#mapadd .Devicestatus-List li:nth-of-type(4) {
+    width: 9.5%;
+    border: 1px solid #e77407;
+    background: rgba(213, 116, 7, 0.5);
 }
-.Devicestatus-List .DevicestatusName{
-	position: absolute;
-	top: -35px;
-	left: 0;
+
+.Devicestatus-List .DevicestatusName {
+    position: absolute;
+    top: -35px;
+    left: 0;
 }
-.pie-chart{
-	width: 100%;
-	height: 82%;
+
+.pie-chart {
+    width: 100%;
+    height: 82%;
+}
+
+.alltitle {
+    font-size: 25px;
+    color: #fff;
+    text-align: center;
+    line-height: 1px;
+}
+
+.tablehead {
+    font-size: .2rem;
+    color: #f0f0f0;
+    text-align: center;
+    line-height: .3rem;
+}
+
+.tabletxt {
+    font-size: .2rem;
+    color: #f0f0f0;
+    text-align: center;
+    line-height: .2rem;
+}
+
+.detail_section {
+    box-sizing: border-box;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    color: white;
+}
+
+.detail_section h3 {
+    margin-top: 0;
+    font-weight: bold;
+}
+
+.detail_section p {
+    margin: 0.5rem 0;
+    line-height: 1.5;
+}
+.detail_container {
+    display: flex;
+    justify-content: space-between; /* 水平居中对齐 */
+}
+
+.liquid_graph {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 15px; /* 添加内边距以增加内容区域空间 */
+    border: 2px solid rgba(40, 171, 194, 0.8); /* 使用半透明颜色和更宽的边框 */
+    border-radius: 8px; /* 添加圆角以美化边框样式 */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 添加微妙阴影效果 */
+    height: 40%;
+    width: 40%;
+}
+
+/*google滚动条样式*/
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    position: absolute
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #5bc0de
+}
+
+::-webkit-scrollbar-track {
+    background-color: #ddd
 }
