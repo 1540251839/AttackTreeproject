@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
     <meta name="renderer" content="webkit">
-    <title>设备详情页</title>
+    <title>MainPage</title>
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.4.4.min.js') }}"></script>
@@ -13,70 +13,51 @@
 </head>
 <body>
 <div class="background">
-    <div class="header">
-        <h1>{{ instrument_name }}</h1>
+    <div class="header1">
+        <h1>MainPage</h1>
     </div>
     <!--主体-->
     <!-- 主容器，包含页面的主要布局 -->
     <div class="main clearfix">
-        <div class="main-left">
+        <div class="main-left" style="width: 25%">
             <div class="menu">
 
             </div>
 
         </div>
         <!-- 中部栏，展示故障设备区域分布情况和故障时段分布 -->
-        <div class="main-middle">
+        <div class="main-middle" style="width: 50%">
             <div class="detail_container">
-                <div class="instrument_detail">
-                    <div class="detail_section">
-                        <h3>设备名称</h3>
-                        <p>{{instrument_detail_name}}</p>
-                    </div>
-                    <div class="detail_section">
-                        <h3>设备类别</h3>
-                        <p>{{instrument_detail_type}}</p>
-                    </div>
-                    <div class="detail_section">
-                        <h3>设备状态</h3>
-                        <p>{{instrument_detail_status}}</p>
-                    </div>
-                    <div class="detail_section">
-                        <h3>设备防护建议</h3>
-                        <p>{{instrument_protection_advise}}</p>
-                    </div>
+                <!---->
+                <div class="beautiful-title" style="height: 20%;font-size: 3vh;margin-top: 3vh">
+                    设备拓扑
                 </div>
-                <div class="liquid_graph">
-                    <div style="text-align: left;color: white;font-size: 2vh">
-                    该设备拓扑重要度排名比例
-                    </div>
-                    {{ liquid|safe }}
+                <div class="centered-content">
+                    {{ relationShipGraph|safe }}
                 </div>
+
             </div>
-            <div class="tree_parent">
-                {{ MainMap|safe }}
-            </div>
+
 
         </div>
         <!-- 右侧栏，展示优秀区域排名和故障类型分布 -->
-        <div class="main-right">
+        <div class="main-right" style="width: 25%">
             <!-- 优秀区域排名区块 -->
             <div class="border-container containertop">
                 <div class="name-title tile-size-color">
-                    各攻击场景的成功概率与威胁程度
+                    各节点PageRank值
                 </div>
                 <div class="centered-content">
-                    {{ mult|safe }}
+                    {{ barPlot|safe }}
                 </div>
-
             </div>
             <!-- 故障类型分布区块 -->
             <div class="border-container containerbottom">
                 <div class="name-title tile-size-color">
-                    各攻击序列成功概率与威胁程度
+                    各节点概况
                 </div>
                 <div class="centered-content">
-                    {{ mult2|safe }}
+                    {{ timeLine|safe }}
                 </div>
 
             </div>
@@ -88,5 +69,6 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/echarts.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/new_file.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

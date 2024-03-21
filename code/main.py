@@ -3,11 +3,14 @@ from utils.pathConfig import *
 from generate_plot.treeMap import *
 from generate_plot.multiCharts import *
 from generate_plot.liquid import *
+from generate_plot.relationShipGraph import *
+from generate_plot.singleBarPlot import *
+from generate_plot.timeLine import *
 app = Flask(__name__, template_folder=frontEndPath, static_folder=frontEndPath)  # 开头必写，创建一个Flask对象从而进行后续操作
 app.config["SECRET_KEY"] = "ABCDFWA"  # 为防CSRF提供一个密匙
 
 
-@app.route('/')
+@app.route('/detail')
 def detailPage():
     instrument_name = "instrument_name"
     instrument_detail_name = "instrument_detail_name"
@@ -31,6 +34,19 @@ def detailPage():
         instrument_detail_type=instrument_detail_type,
         instrument_detail_status=instrument_detail_status,
         instrument_protection_advise=instrument_protection_advise
+    )
+
+
+@app.route('/')
+def MainPage():
+    relationShipGraph = generate_relation_graph()
+    barPlot = generate_single_barPlot()
+    timeLine = generate_timeline_pie()
+    return render_template(
+        'MainPage.html',
+        relationShipGraph=relationShipGraph.render_embed(),
+        barPlot=barPlot.render_embed(),
+        timeLine=timeLine.render_embed()
     )
 
 
