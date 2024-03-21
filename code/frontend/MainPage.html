@@ -9,7 +9,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.4.4.min.js') }}"></script>
 
+    <style>
+        .border-container.containerbottom {
+            position: relative; /* 添加此行以支持子元素绝对定位 */
 
+        }
+
+
+    </style>
 </head>
 <body>
 <div class="background">
@@ -20,7 +27,37 @@
     <!-- 主容器，包含页面的主要布局 -->
     <div class="main clearfix">
         <div class="main-left" style="width: 25%">
-            <div class="menu">
+            <div class="border-container containertop">
+                <div class="name-title tile-size-color">
+                    图安全指数
+                </div>
+                <div class="centered-content">
+                    {{ radar|safe }}
+                </div>
+            </div>
+            <!-- 故障类型分布区块 -->
+            <div class="border-container containerbottom" style="height: 28%">
+                <div class="name-title tile-size-color">
+                    AI分析报告
+                </div>
+                <div id="typing-effect" class="AIReport" style="overflow: auto;color: white">
+
+                </div>
+                <!--<div id="typing-effect"></div>-->
+            </div>
+            <div class="border-container containerbottom" style="height: 16%">
+                <div class="name-title tile-size-color">
+                    查看各节点细节
+                </div>
+                                <div class="AIReport" style="height: 55%;top: 60%">
+                    <!-- 假设我们有一个包含所有节点按钮的div -->
+                    <div class="node-buttons-container">
+                        {% for node in graph_nodes %}
+                        <!-- 使用 Django 模板语法来遍历节点，生成按钮并添加点击事件，跳转到相应路由 -->
+                        <button class="node-button" data-node="{{ node.name }}" onclick="location.href='/detail/{{ node.name }}';">{{ node.name }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
 
             </div>
 
@@ -70,5 +107,44 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/new_file.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>    function typeWriter(element, text, index, interval) {
+    if (index < text.length) {
+        element.innerHTML += text.charAt(index);
+        setTimeout(function () {
+            typeWriter(element, text, index + 1, interval);
+        }, interval);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const text = "{{ report|safe }}".replace(/\[newline\]/g, '\n');
+    const typingElement = document.getElementById('typing-effect');
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function typeWriter(element, text, index, interval) {
+        if (index < text.length) {
+            setTimeout(function () {
+                let char = text[index];
+                // 如果是换行符，则插入<p>标签以实现换行（视实际场景需求调整）
+                if (char === '\n') {
+                    element.innerHTML += '<br>';
+                } else {
+                    element.innerHTML += char;
+                }
+
+                typeWriter(element, text, index + 1, getRandomInt(5, 60));
+            }, interval);
+        }
+    }
+
+    // 首先确保'[newline]'已被替换为'\n'
+    typeWriter(typingElement, text.replace(/\[newline\]/g, '\n'), 0, 0);
+});
+
+
+</script>
 </body>
 </html>

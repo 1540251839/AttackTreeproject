@@ -20,11 +20,16 @@
     <!-- 主容器，包含页面的主要布局 -->
     <div class="main clearfix">
         <div class="main-left">
-            <div class="menu">
-
+            <div class="menu" style="display: flex; flex-direction: column; align-items: center; max-height: 90vh; overflow-y: auto;">
+                <button style="width: 100%; height: 10vh; text-align: center; margin: 1vh; background-image: linear-gradient(to right, #aeeeee, #4990e2);" onclick="location.href='/';">menu</button>
+                {% for node in graph_nodes %}
+                    <button style="width: 100%; height: 10vh; text-align: center; margin: 1vh; background-image: linear-gradient(to right, #3062f2, #7f49e2);" onclick="location.href='/detail/{{ node.name }}';">{{ node.name }}</button>
+                {% endfor %}
             </div>
-
         </div>
+
+
+
         <!-- 中部栏，展示故障设备区域分布情况和故障时段分布 -->
         <div class="main-middle">
             <div class="detail_container">

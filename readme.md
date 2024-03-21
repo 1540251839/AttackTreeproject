@@ -1,3 +1,28 @@
+# 启动方式
+
+1. 安装依赖：
+```shell
+pip install -r requirements.txt
+```
+
+2. 启动服务：
+
+```shell
+cd code
+python main.py
+```
+
+# 网页效果
+
+- 主页面
+
+![img.png](img.png)
+
+- 子页面
+
+![img_1.png](img_1.png)
+
+# 泛ACT层分类
 1. **软件攻击**：
 
 - 恶意软件攻击
