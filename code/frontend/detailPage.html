@@ -14,7 +14,7 @@
 <body>
 <div class="background">
     <div class="header">
-        <h1>X号设备</h1>
+        <h1>{{ instrument_name }}</h1>
     </div>
     <!--主体-->
     <!-- 主容器，包含页面的主要布局 -->
@@ -31,23 +31,23 @@
                 <div class="instrument_detail">
                     <div class="detail_section">
                         <h3>设备名称</h3>
-                        <p>设备1</p>
+                        <p>{{instrument_detail_name}}</p>
                     </div>
                     <div class="detail_section">
                         <h3>设备类别</h3>
-                        <p>类别1</p>
+                        <p>{{instrument_detail_type}}</p>
                     </div>
                     <div class="detail_section">
                         <h3>设备状态</h3>
-                        <p>状态1</p>
+                        <p>{{instrument_detail_status}}</p>
                     </div>
                     <div class="detail_section">
                         <h3>设备防护建议</h3>
-                        <p>建议1建议1建建议1建议1建议1建议1建议1建议1建议1建议1建议1建议1建议1议1</p>
+                        <p>{{instrument_protection_advise}}</p>
                     </div>
                 </div>
                 <div class="liquid_graph">
-                    <div style="text-align: left;color: white;font-size: 20px">
+                    <div style="text-align: left;color: white;font-size: 2vh">
                     该设备拓扑重要度排名比例
                     </div>
                     {{ liquid|safe }}

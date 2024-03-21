@@ -93,7 +93,7 @@ body {
     border: 2px solid rgba(40, 171, 194, 0.8); /* 使用半透明颜色和更宽的边框 */
     border-radius: 8px; /* 添加圆角以美化边框样式 */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 添加微妙阴影效果 */
-    height: 380px; /* 修改高度为固定值，例如300像素 */
+    height: 40vh; /* 修改高度为固定值，例如300像素 */
     width: 60%;
     overflow-y: auto; /* 当内容在垂直方向溢出时显示滚动条 */
 }
@@ -384,6 +384,7 @@ body {
 }
 
 .detail_section h3 {
+    color: lightblue;
     margin-top: 0;
     font-weight: bold;
 }
@@ -407,7 +408,7 @@ body {
     border: 2px solid rgba(40, 171, 194, 0.8); /* 使用半透明颜色和更宽的边框 */
     border-radius: 8px; /* 添加圆角以美化边框样式 */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 添加微妙阴影效果 */
-    height: 40%;
+    height: 40vh;
     width: 40%;
 }
 
