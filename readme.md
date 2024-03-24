@@ -1,3 +1,18 @@
+# git使用教程
+
+- 一般步骤
+
+```bash
+git add . # 提交所有修改
+git commit -m "add"  # 将本次提交注释为add 
+git push origin master # 向远端仓库提交修改
+```
+- 拉取远端仓库代码
+
+```bash
+git pull
+```
+
 # 启动方式
 
 1. 安装依赖：
@@ -10,6 +25,17 @@ pip install -r requirements.txt
 ```shell
 cd code
 python main.py
+```
+# 详细参数
+
+- 启动攻击方式聚类算法
+```shell
+python main.py --mode 'cluster_result'
+```
+
+- 启动Flask网页端
+```shell
+python main.py --mode 'webPage'
 ```
 
 # 网页效果
