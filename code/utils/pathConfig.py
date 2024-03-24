@@ -8,6 +8,7 @@ cssPath = os.path.join(frontEndPath, 'css')
 jsPath = os.path.join(frontEndPath, 'js')
 plotPath = os.path.join(rootPath, 'generate_plot')
 dataPoolPath = os.path.join(rootPath, 'dataPool')
+backendPath = os.path.join(rootPath, 'backend')
 
 print(f"项目根目录：{rootPath}")
 print(f"utils目录：{utilPath}")
