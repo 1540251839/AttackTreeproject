@@ -33,10 +33,60 @@ links输出结果类似如下：
 2. 图的节点数量和边数量不能太多，不然可视化效果不好。具体而言，点最好在10个左右，边最好在点的数量的1.5倍左右。
 3. 对于图中点的大小，遵循如下规则：点连接的点（出度）越多，点的大小就越大。但是对于边缘节点，可以采取一些随机化扰动来使得边缘节点大小存在少量随机性。
 """
-
-
+##更改划分线###############################################################
+import random
+##更改划分线###############################################################
 def generate_topo():
-    nodes = []
-    links = []
-    # 结合注释完成这个函数
+    ##更改划分线###############################################################
+    # 设定节点数量和边数量
+    num_nodes = random.randint(8, 12)
+    num_edges = int(num_nodes * random.uniform(1.2, 1.8))
+
+    # 创建节点
+    nodes = [{'name': f'结点{i}', 'symbolSize': 10} for i in range(1, num_nodes + 1)]
+
+    # 随机选择一个节点，确保每个点至少有一条边
+    start_node = random.choice(nodes)
+
+    # 创建边
+    edges = []
+
+    # 确保每个点至少有一条边
+    for node in nodes:
+        if node != start_node:
+            edges.append((start_node['name'], node['name']))
+
+    # 继续生成其他的边
+    remaining_edges = num_edges - (num_nodes - 1)
+    for _ in range(remaining_edges):
+        i = random.randint(1, num_nodes)
+        while i == int(start_node['name'][2:]):  # 当 i 等于起始节点的编号时，重新生成 i
+            i = random.randint(1, num_nodes)
+        j = random.randint(1, num_nodes)
+        while i == j:  # 当 i 等于 j 时，重新生成 j
+            j = random.randint(1, num_nodes)
+        edges.append((f'结点{i}', f'结点{j}'))
+
+    # 调整节点的大小
+    node_degrees = {node['name']: 0 for node in nodes}
+    for link in edges:
+        node_degrees[link[0]] += 1
+        node_degrees[link[1]] += 1
+
+    out_node_degrees = {node['name']: 0 for node in nodes}
+    for link in edges:
+        out_node_degrees[link[0]] += 1
+
+    for node in nodes:
+        node_name = node['name']
+        node['symbolSize'] = 10 + out_node_degrees[node_name] * 5
+
+    # 对边缘节点进行随机化扰动
+    for node in nodes:
+        if node_degrees[node['name']] == 1:
+            node['symbolSize'] += random.randint(-5, 5)
+
+    # 将边的列表转换成所需的格式
+    links = [{'source': source, 'target': target} for source, target in edges]
+    ##更改划分线###############################################################
     return nodes, links
