@@ -92,9 +92,9 @@ def generate_relation_graph(InputGraph=None):
         .add("",
              nodes,
              links,
-             repulsion=8000,
-             edge_length=300,
-             linestyle_opts=opts.LineStyleOpts(width=2, curve=0.1, opacity=1),
+             repulsion=100*len(nodes),
+             edge_length=3*len(nodes),
+             linestyle_opts=opts.LineStyleOpts(width=2, curve=0.04, opacity=1),
              label_opts=opts.LabelOpts(is_show=True),
              gravity=0.1
              )

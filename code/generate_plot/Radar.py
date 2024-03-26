@@ -1,16 +1,16 @@
 from pyecharts import options as opts
 from pyecharts.charts import Radar
 
-data0 = [{"value": [4, 2, 2, 3], "name": "预算分配"}]
+data0 = [{"value": [4, 2, 2, 3], "name": "图安全系数子指标"}]
 c_schema0 = [
-    {"name": "销售", "max": 4, "min": -4},
-    {"name": "管理", "max": 4, "min": -4},
-    {"name": "技术", "max": 4, "min": -4},
-    {"name": "客服", "max": 4, "min": -4},
+    {"name": "拓扑稳健度", "max": 4, "min": -4},
+    {"name": "关键点防护能力", "max": 4, "min": -4},
+    {"name": "结构合理性", "max": 4, "min": -4},
+    {"name": "样本适量性", "max": 4, "min": -4},
 ]
 
 
-def generate_radar(data=None, c_schema=None, series_name="series_name"):
+def generate_radar(data=None, c_schema=None, series_name="指标"):
     if data is None:
         data = data0
     if c_schema is None:

@@ -10,6 +10,7 @@ from generate_plot.singleBarPlot import *
 from generate_plot.timeLine import *
 from generate_plot.Radar import *
 from backend.drawCluster import draw
+from backend.Generate_Topo import generate_topo, reconstructLinks
 import argparse
 app = Flask(__name__, template_folder=frontEndPath, static_folder=frontEndPath)  # 创建Flask应用实例，配置模板和静态文件路径
 app.config["SECRET_KEY"] = "ABCDFWA"  # 配置Flask应用的密钥
@@ -66,9 +67,19 @@ def MainPage():
     - 渲染后的主页面。
     """
     # 生成各种概览图表
-    relationShipGraph = generate_relation_graph()
-    barPlot = generate_single_barPlot()
-    timeLine = generate_timeline_pie()
+    global graph_nodes
+
+    Topo = generate_topo()
+    graph_nodes = reconstructLinks(Topo)
+    relationShipGraph = generate_relation_graph(Topo)
+    barPlot = generate_single_barPlot(
+        Y_Name="PageRank value",
+        X=[i['name'] for i in Topo['nodes']],
+        Y=[i['symbolSize'] for i in Topo['nodes']]
+    )
+    timeLine = generate_timeline_pie(
+
+    )
     radar = generate_radar()
     return render_template(
         'MainPage.html',
@@ -78,7 +89,6 @@ def MainPage():
         radar=radar.render_embed(),
         graph_nodes=graph_nodes,
         report=report
-
     )
 
 

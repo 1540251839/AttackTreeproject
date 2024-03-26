@@ -33,13 +33,29 @@ links输出结果类似如下：
 2. 图的节点数量和边数量不能太多，不然可视化效果不好。具体而言，点最好在10个左右，边最好在点的数量的1.5倍左右。
 3. 对于图中点的大小，遵循如下规则：点连接的点（出度）越多，点的大小就越大。但是对于边缘节点，可以采取一些随机化扰动来使得边缘节点大小存在少量随机性。
 """
-##更改划分线###############################################################
+import math
+# 更改划分线###############################################################
 import random
-##更改划分线###############################################################
+
+
+def reconstructLinks(Topo):
+    assert 'nodes' in Topo, "Topo must contain 'nodes'"
+    links = Topo['nodes']
+    nodeList = [{"name": i['name'], 'value': i['symbolSize']} for i in links]
+    return nodeList
+
+
+def f(x: float):
+    # 输入x，输出f(x)，保留1位小数
+    return round(15*math.log2(x), 1)
+
+
+# 更改划分线###############################################################
 def generate_topo():
-    ##更改划分线###############################################################
+    # 更改划分线###############################################################
     # 设定节点数量和边数量
-    num_nodes = random.randint(8, 12)
+    random.seed(15422226)
+    num_nodes = random.randint(18, 24)
     num_edges = int(num_nodes * random.uniform(1.2, 1.8))
 
     # 创建节点
@@ -53,7 +69,7 @@ def generate_topo():
 
     # 确保每个点至少有一条边
     for node in nodes:
-        if node != start_node:
+        if node != start_node and random.randint(1, 6) % 3:
             edges.append((start_node['name'], node['name']))
 
     # 继续生成其他的边
@@ -67,7 +83,17 @@ def generate_topo():
             j = random.randint(1, num_nodes)
         edges.append((f'结点{i}', f'结点{j}'))
 
+
     # 调整节点的大小
+    node_degrees = {node['name']: 0 for node in nodes}
+    for link in edges:
+        node_degrees[link[0]] += 1
+        node_degrees[link[1]] += 1
+
+    for node in nodes:
+        if node_degrees[node['name']] == 0:
+            edges.append((f'结点{random.randint(1, num_nodes)}', node['name']))
+
     node_degrees = {node['name']: 0 for node in nodes}
     for link in edges:
         node_degrees[link[0]] += 1
@@ -84,9 +110,15 @@ def generate_topo():
     # 对边缘节点进行随机化扰动
     for node in nodes:
         if node_degrees[node['name']] == 1:
-            node['symbolSize'] += random.randint(-5, 5)
+            node['symbolSize'] += random.randint(-2, 2)
+
+    for node in nodes:
+        # 对nodes中多个node['symbolSize']对应的数进行归一化
+        node['symbolSize'] = f(node['symbolSize'])
 
     # 将边的列表转换成所需的格式
     links = [{'source': source, 'target': target} for source, target in edges]
-    ##更改划分线###############################################################
-    return nodes, links
+    # 更改划分线###############################################################
+    return {"nodes": nodes, "links": links}
+
+
