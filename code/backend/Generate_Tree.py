@@ -351,5 +351,32 @@ metaACT = {
 }
 
 
-def generate_tree():
-    pass
+import random
+import pprint
+MAX_DEPTH = 50  # 设置最大递归深度
+BACKTRACK_PROBABILITY = 1  # 设置回溯概率
+
+
+def generate_subtree(node, depth=0):
+    if not isinstance(node, dict) or depth >= MAX_DEPTH:  # 判断是否为字典类型并且达到最大递归深度
+        return node
+
+    subtree = {}
+    for key, value in node.items():
+        if random.randint(1, 10)/10 <= BACKTRACK_PROBABILITY - depth/10:  # 随机决定是否回溯
+            subtree[key] = generate_subtree(value, depth + 1)
+        else:
+            break  # 若选择回溯，则停止遍历当前层级的剩余节点
+
+    return subtree
+
+
+def generate_tree(meta_ACT):
+    return generate_subtree(meta_ACT)
+
+
+if __name__ == '__main__':
+    # 调用函数生成子集
+    subset_metaACT = generate_tree(metaACT)
+    pprint.pprint(subset_metaACT)
+    print("end")
