@@ -6,6 +6,35 @@ from pyecharts.faker import Faker
 
 
 def generate_timeline_pie(Y1_name="Algorithm 1", Y2_name="Algorithm 2", Y1=None, Y2=None, X=None):
+    """
+    :param Y1_name:
+    :param Y2_name:
+    :param Y1:
+    :param Y2:
+    :param X:
+    :return:
+
+    输入数据样例展示：
+    X:
+        ['度数', '脆弱度', '重要性', '威胁度']
+    Y1:
+        [
+            [36, 27, 14, 3],
+            [18, 34, 25, 10],
+            [23, 20, 39, 1],
+            ...,
+            [21, 22, 31, 38]
+        ]
+    Y2:
+        [
+            [10, 38, 12, 28],
+            [31, 15, 26, 37],
+            [11, 24, 33, 3],
+            ...,
+            [39, 29, 35, 13]
+        ]
+
+    """
     if Y1 is None or Y2 is None or X is None:
         X = ['度数', '脆弱度', '重要性', '威胁度']
         Y1 = [[random.randint(1, 40) for __ in range(4)] for _ in range(19)]
