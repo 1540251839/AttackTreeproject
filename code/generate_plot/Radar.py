@@ -10,20 +10,20 @@ c_schema0 = [
 ]
 
 
-def generate_radar(data=None, c_schema=None, series_name="指标"):
+def generate_radar(data=None, c_schema=None, series_name="安全指标", series_name1='平均值'):
     if data is None:
         data = data0
     if c_schema is None:
         c_schema = c_schema0
     assert len(c_schema) == len(data[0]['value']), "c_schema length must equal data length"
     c = (
-        Radar(init_opts=opts.InitOpts(width="45vh", height="40vh"))
+        Radar(init_opts=opts.InitOpts(width="40vh", height="40vh"))
         .set_colors(["#4587E7"])
         .add_schema(
             schema=c_schema,
             shape="circle",
             center=["50%", "50%"],
-            radius="80%",
+            radius="60%",
             angleaxis_opts=opts.AngleAxisOpts(
                 min_=0,
                 max_=360,
@@ -35,12 +35,12 @@ def generate_radar(data=None, c_schema=None, series_name="指标"):
                 splitline_opts=opts.SplitLineOpts(is_show=False),
             ),
             radiusaxis_opts=opts.RadiusAxisOpts(
-                min_=-4,
-                max_=4,
+                min_=0,
+                max_=10,
                 interval=2,
                 splitarea_opts=opts.SplitAreaOpts(
                     is_show=True, areastyle_opts=opts.AreaStyleOpts(opacity=1)
-                ),
+                )
             ),
             axislabel_opt=opts.LabelOpts(is_show=False),
             textstyle_opts=opts.TextStyleOpts(color="white"),
@@ -50,10 +50,17 @@ def generate_radar(data=None, c_schema=None, series_name="指标"):
         )
         .add(
             series_name=series_name,
-            data=data,
-            areastyle_opts=opts.AreaStyleOpts(opacity=0.1),
-            linestyle_opts=opts.LineStyleOpts(width=1),
-            color='blue'
+            data=[data[0]],
+            areastyle_opts=opts.AreaStyleOpts(opacity=0.4),
+            linestyle_opts=opts.LineStyleOpts(width=2),
+            color='skyblue'
+        )
+        .add(
+            series_name=series_name1,
+            data=[data[1]],
+            areastyle_opts=opts.AreaStyleOpts(opacity=0.4),
+            linestyle_opts=opts.LineStyleOpts(width=2),
+            color='grey'
         )
         .set_global_opts(
             legend_opts=opts.LegendOpts(

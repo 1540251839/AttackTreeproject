@@ -11,6 +11,7 @@ from generate_plot.timeLine import *
 from generate_plot.Radar import *
 from backend.drawCluster import draw
 from backend.Generate_Topo import generate_topo, reconstructLinks
+from backend.Generate_Radar_data import *
 import argparse
 app = Flask(__name__, template_folder=frontEndPath, static_folder=frontEndPath)  # 创建Flask应用实例，配置模板和静态文件路径
 app.config["SECRET_KEY"] = "ABCDFWA"  # 配置Flask应用的密钥
@@ -80,7 +81,12 @@ def MainPage():
     timeLine = generate_timeline_pie(
 
     )
-    radar = generate_radar()
+    radar_data = calc_metrics(nodes=Topo['nodes'], links=Topo['links'])
+    metrix_range, c_schema, data1 = calc_average_metrix()
+    radar = generate_radar(
+        data=[radar_data[1], data1],
+        c_schema=c_schema
+    )
     return render_template(
         'MainPage.html',
         relationShipGraph=relationShipGraph.render_embed(),
