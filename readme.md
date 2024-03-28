@@ -7,6 +7,7 @@ git add . # 提交所有修改
 git commit -m "add"  # 将本次提交注释为add 
 git push origin master # 向远端仓库提交修改
 ```
+
 - 拉取远端仓库代码
 
 ```bash
@@ -16,6 +17,7 @@ git pull
 # 启动方式
 
 1. 安装依赖：
+
 ```shell
 pip install -r requirements.txt
 ```
@@ -26,14 +28,17 @@ pip install -r requirements.txt
 cd code
 python main.py
 ```
+
 # 详细参数
 
 - 启动攻击方式聚类算法
+
 ```shell
 python main.py --mode 'cluster_result'
 ```
 
 - 启动Flask网页端
+
 ```shell
 python main.py --mode 'webPage'
 ```
@@ -42,13 +47,34 @@ python main.py --mode 'webPage'
 
 - 主页面
 
-![img.png](img.png)
+![img_2.png](img_2.png)
 
 - 子页面
 
-![img_1.png](img_1.png)
+![img_3.png](img_3.png)
+
+# 拓扑分析
+
+![image.png](assets/image.png)
+
+其中
+
+node14、9、19、17、11是路由器
+
+node 3、15、2、16是数据中心
+
+node 13是管理员终端
+
+node 16是数据中心
+
+node 10、4是交换机
+
+node 8、12是终端
+
+node 10、5、1、7、6是数据中心
 
 # 泛ACT层分类
+
 1. **软件攻击**：
 
 - 恶意软件攻击
@@ -125,7 +151,6 @@ python main.py --mode 'webPage'
   - RFID克隆
   - RFID中间人攻击
 
-
 4. **物理攻击**：
 
 - 硬件篡改
@@ -140,7 +165,6 @@ python main.py --mode 'webPage'
 - 电磁攻击
   - TEMPEST攻击
   - EMP攻击
-
 
 5. **其他攻击**：
 
