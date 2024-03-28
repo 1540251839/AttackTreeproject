@@ -2,8 +2,8 @@ import pyecharts.options as opts
 from pyecharts.charts import Bar, Line
 
 x_data = [f"E{i}" for i in range(2, 14, 1)]
-y1_data = [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
-y2_data = [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+y1_data = [0.2, 0.49, 0.70, 0.232, 0.256, 0.767, 0.136, 0.1622, 0.326, 0.20, 0.64, 0.33]
+y2_data = [0.2, 0.49, 1.20, 0.332, 0.356, 0.767, 1.136, 0.1622, 0.326, 0.20, 0.64, 0.33]
 
 
 def generate_muti(X=None, Y1_Name="Y1_Name", Y2_Name="Y2_Name", Y1=None, Y2=None):
@@ -13,7 +13,13 @@ def generate_muti(X=None, Y1_Name="Y1_Name", Y2_Name="Y2_Name", Y1=None, Y2=None
         Y1 = y1_data
     if Y2 is None:
         Y2 = y2_data
-    assert len(X) == len(Y1) == len(Y2), "X, Y1, Y2 must have the same length"
+    # X, Y1, Y2 = x_data, y1_data, y2_data
+    print(X)
+    print(Y1)
+    print(Y2)
+    print(Y1_Name)
+    print(Y2_Name)
+    assert len(X) == len(Y1) == len(Y2), "X, Y1, Y2 must have the same length, got {} and {}".format(X, Y1)
     bar = (
         Bar(init_opts=opts.InitOpts(width="80vh", height="40vh"))
         .add_xaxis(xaxis_data=X)
@@ -26,9 +32,9 @@ def generate_muti(X=None, Y1_Name="Y1_Name", Y2_Name="Y2_Name", Y1=None, Y2=None
             yaxis=opts.AxisOpts(
                 name=Y2_Name,
                 type_="value",
-                min_=0,
-                max_=25,
-                interval=5,
+                min_=min(Y2) - 0.5,
+                max_=max(Y2) + 0.05,
+                interval=0.1,
                 axislabel_opts=opts.LabelOpts(formatter="{value}", color='white'),
                 is_show=False
             )
@@ -46,9 +52,9 @@ def generate_muti(X=None, Y1_Name="Y1_Name", Y2_Name="Y2_Name", Y1=None, Y2=None
             ),
             yaxis_opts=opts.AxisOpts(
                 type_="value",
-                min_=0,
-                max_=250,
-                interval=50,
+                min_=min(Y1) - 0.1,
+                max_=max(Y1) + 0.35,
+                interval=0.1,
                 axislabel_opts=opts.LabelOpts(formatter="{value}", color='white'),
                 axistick_opts=opts.AxisTickOpts(is_show=True),
                 splitline_opts=opts.SplitLineOpts(is_show=True),
@@ -65,7 +71,7 @@ def generate_muti(X=None, Y1_Name="Y1_Name", Y2_Name="Y2_Name", Y1=None, Y2=None
 
     line = (
         Line()
-        .add_xaxis(xaxis_data=x_data)
+        .add_xaxis(xaxis_data=X)
         .add_yaxis(
             series_name=Y2_Name,
             yaxis_index=1,
@@ -102,10 +108,14 @@ def generate_muti_reverse(X_data=None, Y1=None, Y2=None, Y1_name="Y1_name", Y2_n
         .reversal_axis()
         .set_series_opts(label_opts=opts.LabelOpts(position="right"))
         .set_global_opts(
-            xaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True),
-                                     axislabel_opts=opts.LabelOpts(color="white")),
-            yaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=True),
-                                     axislabel_opts=opts.LabelOpts(color="white")),
+            xaxis_opts=opts.AxisOpts(
+                splitline_opts=opts.SplitLineOpts(is_show=True),
+                axislabel_opts=opts.LabelOpts(color="white"), min_=min(Y1) - 0.1,
+                max_=max(Y1) + 0.1),
+            yaxis_opts=opts.AxisOpts(
+                splitline_opts=opts.SplitLineOpts(is_show=True),
+                axislabel_opts=opts.LabelOpts(color="white"),
+            ),
             legend_opts=opts.LegendOpts(
                 is_show=True,
                 orient='horizontal',

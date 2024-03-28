@@ -70,7 +70,7 @@ def generate_topo():
     num_edges = int(num_nodes * random.uniform(1.2, 1.8))
 
     # 创建节点
-    nodes = [{'name': f'结点{i}', 'symbolSize': 10} for i in range(1, num_nodes + 1)]
+    nodes = [{'name': f'node{i}', 'symbolSize': 10} for i in range(1, num_nodes + 1)]
 
     # 随机选择一个节点，确保每个点至少有一条边
     start_node = random.choice(nodes)
@@ -87,12 +87,12 @@ def generate_topo():
     remaining_edges = num_edges - (num_nodes - 1)
     for _ in range(remaining_edges):
         i = random.randint(1, num_nodes)
-        while i == int(start_node['name'][2:]):  # 当 i 等于起始节点的编号时，重新生成 i
+        while i == int(start_node['name'][4:]):  # 当 i 等于起始节点的编号时，重新生成 i
             i = random.randint(1, num_nodes)
         j = random.randint(1, num_nodes)
         while i == j:  # 当 i 等于 j 时，重新生成 j
             j = random.randint(1, num_nodes)
-        edges.append((f'结点{i}', f'结点{j}'))
+        edges.append((f'node{i}', f'node{j}'))
 
 
     # 调整节点的大小
@@ -103,7 +103,7 @@ def generate_topo():
 
     for node in nodes:
         if node_degrees[node['name']] == 0:
-            edges.append((f'结点{random.randint(1, num_nodes)}', node['name']))
+            edges.append((f'node{random.randint(1, num_nodes)}', node['name']))
 
     node_degrees = {node['name']: 0 for node in nodes}
     for link in edges:

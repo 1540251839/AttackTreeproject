@@ -34,18 +34,43 @@ def detailPage(equipment):
     - 渲染后的设备详情页面。
     """
     # 初始化设备详情信息
+    Topo = generate_topo()
+    equipment_id = int(equipment.replace("node", ""))
     equipment_name = equipment
+
+    # 计算设备拓扑重要度排名比例
+    importance = [i['symbolSize'] for i in Topo['nodes']]
+    great = 0
+    for index, i in enumerate(importance):
+        if Topo['nodes'][equipment_id - 1]['symbolSize'] < i:
+            great += 1
+
+    percentage_of_equipment = 1 - great/len(importance)
+
     equipment_detail_name = "equipment_detail_name"
     equipment_detail_type = "equipment_detail_type"
     equipment_detail_status = "equipment_detail_status"
     equipment_protection_advise = 'equipment_protection_advise'
-    percentage_of_equipment = 0.54
+
+    # Topo['nodes'][equipment_id-1]['symbolSize']
 
     # 生成各种图表
     ACT.Sample_neg2Nodes_id(sum(ord(char) for char in equipment))
     TreeMap = generateTreeMap(ACT.format_json_tree_sample)
-    mult = generate_muti()
-    mult2 = generate_muti_reverse()
+    mult = generate_muti(
+        X=ACT.format_batList_sample_leaf_nodes,
+        Y1=ACT.pro_leaf,
+        Y2=ACT.threat_leaf,
+        Y1_Name="脆弱度",
+        Y2_Name="威胁度"
+    )
+    mult2 = generate_muti_reverse(
+        X_data=ACT.format_batList_sample_leaf_sequence,
+        Y1=ACT.pro_path,
+        Y2=ACT.threat_path,
+        Y1_name="脆弱度",
+        Y2_name="威胁度"
+    )
     liquid = generate_liquid(percentage_of_equipment)
     return render_template(
         'detailPage.html',

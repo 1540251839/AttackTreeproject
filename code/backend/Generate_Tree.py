@@ -1,8 +1,9 @@
+import math
 import pprint
 import random
 
 metaACT = {
-    "ACT泛攻击层可视化": {
+    "ACT": {
         "攻击行为": {
             "物理攻击": {
                 "硬件篡改": {
@@ -348,8 +349,10 @@ class Node:
     - sons_id: 子节点的标识列表，默认为None，初始化为空列表。
     """
 
-    def __init__(self, contents, ID, depth, father_id=None, sons_id=None, nodeType='None-leaf'):
+    def __init__(self, contents, ID, depth, father_id=None, sons_id=None, nodeType='None-leaf', value=1, seed=None):
         assert nodeType in ['None-leaf', 'leaf'], "nodeType must in 'None-leaf', 'leaf', got {}".format(nodeType)
+        if seed is not None:
+            random.seed(seed)
         if sons_id is None:
             sons_id = []
         self.contents = contents
@@ -359,6 +362,12 @@ class Node:
         self.nodeType = nodeType
         self.depth = depth
         self.offspring_id = []
+        self.value = value
+        self.E_id = " E-" + str(self.id)
+
+    def resed(self, sed):
+        random.seed(sed)
+        self.value = random.randint(1, 95) / 100
 
 
 class MetaACT:
@@ -384,6 +393,14 @@ class MetaACT:
         self._generate_node_from_metaACT()  # 从metaACT数据生成节点
         self.format_json_tree = self._generate_format_json_tree(curNode=self._fetch_node_by_id(0))  # 生成格式化的JSON树结构
         self.format_json_tree_sample = None  # 存储示例格式化的JSON树结构
+        self.format_batList_sample_leaf_nodes_id = []  # 攻击场景
+        self.format_batList_sample_leaf_nodes = []  # 攻击场景 名称
+        self.format_batList_sample_leaf_sequence = []  # 攻击序列 名称
+        self.format_batList_sample_leaf_sequence_id = []  # 攻击序列 id
+        self.pro_leaf = []  # 攻击场景概率
+        self.pro_path = []  # 攻击序列概率
+        self.threat_leaf = []  # 攻击场景威胁
+        self.threat_path = []  # 攻击序列威胁
 
         # 检查节点ID位置是否正确
         for index, node in enumerate(self.Nodes):
@@ -405,6 +422,58 @@ class MetaACT:
         """
         return len(set(ListA) & set(ListB)) > 0
 
+    @staticmethod
+    def _softmax(Lst, Max):
+        """
+        使用softmax函数对列表Lst中的数值进行归一化处理，确保结果在0至Max之间。
+
+        参数:
+        Lst - 需要归一化的数值列表。
+        Max - 归一化后的最大值限制。
+
+        返回值:
+        normalized_lst - 经过softmax函数处理并限制在0至Max之间的归一化数值列表。
+
+        注意：这里的实现是基于softmax函数的逻辑，并根据题目要求进行了额外的范围限制，通常softmax函数会将结果归一化到(0, 1)之间。
+
+        """
+        # 计算softmax前先对列表中的数值进行预处理，减去最小值以避免下溢问题
+        lst_min = min(Lst)
+        adjusted_lst = [x - lst_min for x in Lst]
+
+        # 计算softmax值
+        exp_lst = [math.exp(x) for x in adjusted_lst]
+        sum_exp = sum(exp_lst)
+
+        # 计算softmax归一化后的值
+        softmax_lst = [e / sum_exp for e in exp_lst]
+
+        # 将softmax归一化后的值线性映射到0至Max范围内
+        normalized_lst = [round((Max * s) / max(softmax_lst), 3) for s in softmax_lst]
+
+        return normalized_lst
+
+
+    @staticmethod
+    def _contact_list(List):
+        """
+        将列表中的所有元素连接成一个字符串。
+
+        参数:
+        List - 包含要连接的元素的列表。
+
+        返回值:
+        res - 连接后生成的字符串。
+        """
+        res = ""  # 初始化结果字符串
+
+        # 遍历列表，将每个元素转换为字符串并添加到结果字符串中
+        for item in List:
+            res += str(item)
+
+        return res  # 返回最终结果字符串
+
+
     def _count_depth(self, depth):
         """
         统计树中指定深度的节点数量。
@@ -416,7 +485,6 @@ class MetaACT:
         if depth not in self.depth_count:
             self.depth_count[depth] = 0
         self.depth_count[depth] += 1  # 深度计数加一
-
 
     def _fetch_node_by_id(self, ID) -> Node:
         """
@@ -450,7 +518,7 @@ class MetaACT:
                 contents=key,
                 ID=self.cur_max_node_ID,
                 father_id=curNode.id,
-                depth=depth
+                depth=depth,
             )
             self._count_depth(depth)
             curNode.sons_id.append(sonNode.id)
@@ -504,38 +572,102 @@ class MetaACT:
         - 格式化的JSON树结构（字典形式）。
         """
         curTree = {
-            "name": curNode.contents,
+            "name": curNode.contents + curNode.E_id,
             "children": [],
-            'value': random.randint(1, 100) / 100
+            'value': curNode.value
         }
         for son_ID in curNode.sons_id:
             curTree['children'].append(self._generate_format_json_tree(curNode=self._fetch_node_by_id(ID=son_ID)))
             self.Nodes[curNode.id].offspring_id += self.Nodes[son_ID].offspring_id + [son_ID]
         return curTree
 
-    def _generate_sampled_json_tree(self, curNode: Node):
+    def _generate_sampled_json_tree(self, curNode: Node, seed: int):
         """
         根据当前节点生成格式化的JSON树结构。
 
         参数:
-        - curNode: 当前处理的节点对象。
+        - curNode: 当前处理的节点对象，类型为Node。
+        - seed: 用于随机化处理的种子值，类型为int。
 
         返回:
-        - 格式化的JSON树结构（字典形式）。
+        - 格式化的JSON树结构（字典形式），如果当前节点不满足条件，则返回-1。
         """
+        # 检查当前节点及其子节点是否在指定的节点列表中，且当前节点不是叶子节点
         if (self._check_common_in_list(curNode.offspring_id + [curNode.id],
                                        self.sample_neg2Nodes_id) is False) and (curNode.nodeType != 'leaf'):
             return -1
+        # 如果当前节点是叶子节点，对其进行特定的处理
+        if curNode.nodeType == 'leaf':
+            curNode.resed(seed + curNode.id)
+        # 初始化当前节点的JSON树结构
         curTree = {
-            "name": curNode.contents,
+            "name": curNode.contents + curNode.E_id,
             "children": [],
-            'value': random.randint(1, 100) / 100
         }
+        # 遍历当前节点的所有子节点，递归生成它们的JSON树结构
         for son_ID in curNode.sons_id:
-            sonTree = self._generate_sampled_json_tree(curNode=self._fetch_node_by_id(ID=son_ID))
+            sonTree = self._generate_sampled_json_tree(curNode=self._fetch_node_by_id(ID=son_ID),
+                                                       seed=seed + curNode.id)
+            # 打印节点值，用于调试或记录
+            print(self._fetch_node_by_id(son_ID).value, curNode.value)
+            # 更新当前节点的值
+            if self._fetch_node_by_id(son_ID).value + curNode.value < 1:
+                curNode.value += self._fetch_node_by_id(son_ID).value
+            else:
+                curNode.value *= self._fetch_node_by_id(son_ID).value
+            # 对节点值进行四舍五入，保持两位小数
+            curNode.value = round(curNode.value, 2)
+            # 如果子节点的JSON树结构不为-1（即满足条件），则将其添加到当前节点的子节点列表中
             if sonTree is not -1:
                 curTree['children'].append(sonTree)
+        # 添加当前节点的值到JSON树结构中
+        curTree['value'] = curNode.value
         return curTree
+
+
+    def _fetch_father_id(self, ID):
+        """
+        获取指定节点ID的父节点ID。
+
+        参数:
+        - ID: 指定节点的ID。
+
+        返回值:
+        - 父节点的ID。
+        """
+        return self._fetch_node_by_id(ID=ID).father_id
+
+    def _calc_path_accumulate_prod(self, leaf_node_id):
+        """
+        计算从叶子节点到根节点的路径上所有节点属性的累积乘积。
+
+        参数:
+        - leaf_node_id: 叶子节点的ID。
+
+        返回值:
+        - 路径上所有节点属性的累积乘积。
+
+        注意:
+        - 该函数假设给定的节点ID是一个叶子节点，如果不是，将抛出断言错误。
+        """
+        # 确保给定的节点是叶子节点
+        assert self._fetch_node_by_id(leaf_node_id).nodeType == 'leaf', f'{leaf_node_id} is not a leaf node'
+
+        # 初始化累积乘积为1
+        res = 1
+        # 当前处理的节点ID
+        cur_p = leaf_node_id
+
+        # 从叶子节点递归向上计算累积乘积直到根节点
+        while self._fetch_node_by_id(cur_p).father_id is not None:
+            # 将当前节点的值乘以累积乘积
+            res = round(res * self._fetch_node_by_id(cur_p).value, 3)
+            # 更新当前处理的节点ID为父节点ID
+            cur_p = self._fetch_node_by_id(cur_p).father_id
+
+        return res
+
+
 
     def Sample_neg2Nodes_id(self, sed=None):
         """
@@ -547,15 +679,57 @@ class MetaACT:
         # 如果提供了sed参数，则设置随机数种子
         if sed is not None:
             random.seed(sed)
+        else:
+            sed = 101
 
         self.sample_neg2Nodes_id = []
+        self.format_batList_sample_leaf_nodes_id = []  # 攻击场景
+        self.format_batList_sample_leaf_nodes = []  # 攻击场景 名称
+        self.format_batList_sample_leaf_sequence = []  # 攻击序列 名称
+        self.format_batList_sample_leaf_sequence_id = []  # 攻击序列 id
+        self.pro_leaf = []  # 攻击场景概率
+        self.pro_path = []  # 攻击序列概率
+        self.threat_leaf = []  # 攻击场景威胁
+        self.threat_path = []  # 攻击序列威胁
+
+
         # 遍历neg2Nodes_id列表
         for i in self.neg2Nodes_id:
             if random.randint(1, 1000) / 1000 < 0.2:  # 选择节点
                 self.sample_neg2Nodes_id.append(i)
-
+                self.format_batList_sample_leaf_nodes_id += self._fetch_node_by_id(ID=i).sons_id
+                self.format_batList_sample_leaf_nodes += [self._fetch_node_by_id(N).E_id for N in self._fetch_node_by_id(ID=i).sons_id]
         # 生成并设置格式化的采样json树结构
-        self.format_json_tree_sample = self._generate_sampled_json_tree(curNode=self.Nodes[0])
+        self.format_json_tree_sample = self._generate_sampled_json_tree(curNode=self.Nodes[0], seed=sed)
+
+        # 计算攻击场景和攻击序列相关概率
+        # 从self.format_batList_sample_leaf_nodes_id列表中随机选取2到4个样本放在一个新列表中
+        for _ in range(5):
+            sample = random.sample(self.format_batList_sample_leaf_nodes_id, random.randint(2, 4))
+            sample_name = [self._fetch_node_by_id(curNode_id).E_id for curNode_id in sample]
+            self.format_batList_sample_leaf_sequence_id.append(sample)
+            self.format_batList_sample_leaf_sequence.append(self._contact_list(sample_name))
+
+        # 计算攻击场景概率和威胁
+        leaf_pro = []
+        for ID in self.format_batList_sample_leaf_nodes_id:
+            p = self._calc_path_accumulate_prod(ID)
+            leaf_pro.append(round(p, 3))
+            self.threat_leaf.append(round(p + p*random.randint(-60, 60)/130, 3))
+
+        # 计算攻击序列概率和威胁
+        path_pro = []
+        for seq in self.format_batList_sample_leaf_sequence_id:
+            path_pro.append(0)
+            for ID in seq:
+                path_pro[-1] += self._calc_path_accumulate_prod(ID)
+            path_pro[-1] = round(path_pro[-1], 3)
+            self.threat_path.append(round(path_pro[-1] + path_pro[-1] * random.randint(-90, 90) / 100, 3))
+
+        self.pro_leaf = self._softmax(leaf_pro, random.randint(75, 90)/100)
+        self.pro_path = self._softmax(path_pro, random.randint(75, 90)/100)
+        self.threat_path = self._softmax(self.threat_path, random.randint(75, 90)/100)
+        self.threat_leaf = self._softmax(self.threat_leaf, random.randint(75, 90)/100)
 
 
 if __name__ == "__main__":
