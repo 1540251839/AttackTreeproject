@@ -1,3 +1,4 @@
+import pprint
 import random
 
 metaACT = {
@@ -124,9 +125,7 @@ metaACT = {
                         },
                         "零日攻击": [
                             {"方法名称": "利用未公开漏洞",
-                             "描述": "攻击者利用软件或系统中尚未被公众发现的漏洞，执行恶意代码或获取敏感信息。"},
-                            {"方法名称": "社会工程学",
-                             "描述": "通过欺骗、伪装等手段，诱导目标用户泄露敏感信息或执行恶意操作，进而实施攻击。"}
+                             "描述": "攻击者利用软件或系统中尚未被公众发现的漏洞，执行恶意代码或获取敏感信息。"}
                         ]
                     },
                     "操作系统攻击": {
@@ -359,6 +358,7 @@ class Node:
         self.id = ID
         self.nodeType = nodeType
         self.depth = depth
+        self.offspring_id = []
 
 
 class MetaACT:
@@ -375,20 +375,50 @@ class MetaACT:
         """
         初始化MetaACT类实例，创建根节点并生成初始的树结构。
         """
-        self.metaData = metaACT
-        self.depth_count = {}
-        self.Nodes = []
-        self.cur_max_node_ID = 0
-        self._generate_node_from_metaACT()
-        self.format_json_tree = self._generate_format_json_tree(curNode=self._fetch_node_by_id(0))
+        self.metaData = metaACT  # 原始metaACT数据存储
+        self.depth_count = {}  # 用于存储树的深度计数
+        self.Nodes = []  # 节点对象列表存储
+        self.cur_max_node_ID = 0  # 当前最大节点ID，用于生成唯一ID
+        self.neg2Nodes_id = []  # 存储特定ID的节点列表
+        self.sample_neg2Nodes_id = []  # 示例节点ID列表
+        self._generate_node_from_metaACT()  # 从metaACT数据生成节点
+        self.format_json_tree = self._generate_format_json_tree(curNode=self._fetch_node_by_id(0))  # 生成格式化的JSON树结构
+        self.format_json_tree_sample = None  # 存储示例格式化的JSON树结构
 
+        # 检查节点ID位置是否正确
+        for index, node in enumerate(self.Nodes):
+            if index != node.id:
+                raise Exception("Node ID position error")
+
+    @staticmethod
+    def _check_common_in_list(ListA, ListB):
+        """
+        检查两个列表是否有共同元素。
+
+        参数:
+        - ListA: 第一个列表。
+        - ListB: 第二个列表。
+
+        返回值:
+        - True: 如果两个列表有至少一个共同元素。
+        - False: 如果两个列表没有共同元素。
+        """
+        return len(set(ListA) & set(ListB)) > 0
 
     def _count_depth(self, depth):
+        """
+        统计树中指定深度的节点数量。
+
+        参数:
+        - depth: 节点的深度。
+        """
+        # 如果指定深度未被记录，则初始化计数为0
         if depth not in self.depth_count:
             self.depth_count[depth] = 0
-        self.depth_count[depth] += 1
+        self.depth_count[depth] += 1  # 深度计数加一
 
-    def _fetch_node_by_id(self, ID):
+
+    def _fetch_node_by_id(self, ID) -> Node:
         """
         根据ID查找并返回节点。
 
@@ -403,10 +433,7 @@ class MetaACT:
         """
         if self.Nodes[ID].id == ID:
             return self.Nodes[ID]
-        for Node_ in self.Nodes:
-            if Node_.id == ID:
-                return Node_
-        raise Exception(f"No such ID {ID} in Tree!!!")
+        raise Exception(f"No such ID {ID} in Tree!!! maybe something went wrong with Node ID and its position")
 
     def _generate_father_son_relationships_with_dfs(self, curTree, curNode, depth):
         """
@@ -430,9 +457,10 @@ class MetaACT:
             self.Nodes.append(sonNode)
             self.cur_max_node_ID += 1
             if isinstance(value, dict):
-                self._generate_father_son_relationships_with_dfs(curTree=value, curNode=sonNode, depth=depth+1)
+                self._generate_father_son_relationships_with_dfs(curTree=value, curNode=sonNode, depth=depth + 1)
             else:
                 # 处理叶子节点，构建父子节点关系
+                self.neg2Nodes_id.append(sonNode.id)
                 for instance in value:
                     assert isinstance(instance, dict), f'invalid instance: {instance}| value:{value}'
                     sonNode1 = Node(
@@ -478,16 +506,60 @@ class MetaACT:
         curTree = {
             "name": curNode.contents,
             "children": [],
-            'value': random.randint(1, 100)/100
+            'value': random.randint(1, 100) / 100
         }
         for son_ID in curNode.sons_id:
             curTree['children'].append(self._generate_format_json_tree(curNode=self._fetch_node_by_id(ID=son_ID)))
+            self.Nodes[curNode.id].offspring_id += self.Nodes[son_ID].offspring_id + [son_ID]
         return curTree
 
+    def _generate_sampled_json_tree(self, curNode: Node):
+        """
+        根据当前节点生成格式化的JSON树结构。
 
+        参数:
+        - curNode: 当前处理的节点对象。
 
+        返回:
+        - 格式化的JSON树结构（字典形式）。
+        """
+        if (self._check_common_in_list(curNode.offspring_id + [curNode.id],
+                                       self.sample_neg2Nodes_id) is False) and (curNode.nodeType != 'leaf'):
+            return -1
+        curTree = {
+            "name": curNode.contents,
+            "children": [],
+            'value': random.randint(1, 100) / 100
+        }
+        for son_ID in curNode.sons_id:
+            sonTree = self._generate_sampled_json_tree(curNode=self._fetch_node_by_id(ID=son_ID))
+            if sonTree is not -1:
+                curTree['children'].append(sonTree)
+        return curTree
+
+    def Sample_neg2Nodes_id(self, sed=None):
+        """
+        从neg2Nodes_id中采样节点id，不重复。
+        :param sed: 可选参数，如果提供，则用作随机数生成器的种子，确保结果可复现。
+        :return: 无返回值，但会修改实例变量sample_neg2Nodes_id和format_json_tree_sample。
+        """
+
+        # 如果提供了sed参数，则设置随机数种子
+        if sed is not None:
+            random.seed(sed)
+
+        self.sample_neg2Nodes_id = []
+        # 遍历neg2Nodes_id列表
+        for i in self.neg2Nodes_id:
+            if random.randint(1, 1000) / 1000 < 0.2:  # 选择节点
+                self.sample_neg2Nodes_id.append(i)
+
+        # 生成并设置格式化的采样json树结构
+        self.format_json_tree_sample = self._generate_sampled_json_tree(curNode=self.Nodes[0])
 
 
 if __name__ == "__main__":
     metaACT = MetaACT()
+    metaACT.Sample_neg2Nodes_id(112)
+    pprint.pprint(metaACT.format_json_tree_sample)
     print("end")

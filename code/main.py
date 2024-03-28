@@ -12,7 +12,9 @@ from generate_plot.Radar import *
 from backend.drawCluster import draw
 from backend.Generate_Topo import generate_topo, reconstructLinks
 from backend.Generate_Radar_data import *
+from backend.Generate_Tree import MetaACT
 import argparse
+ACT = MetaACT()
 app = Flask(__name__, template_folder=frontEndPath, static_folder=frontEndPath)  # 创建Flask应用实例，配置模板和静态文件路径
 app.config["SECRET_KEY"] = "ABCDFWA"  # 配置Flask应用的密钥
 
@@ -40,7 +42,8 @@ def detailPage(equipment):
     percentage_of_equipment = 0.54
 
     # 生成各种图表
-    TreeMap = generateTreeMap()
+    ACT.Sample_neg2Nodes_id(sum(ord(char) for char in equipment))
+    TreeMap = generateTreeMap(ACT.format_json_tree_sample)
     mult = generate_muti()
     mult2 = generate_muti_reverse()
     liquid = generate_liquid(percentage_of_equipment)

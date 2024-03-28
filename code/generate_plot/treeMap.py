@@ -146,7 +146,7 @@ def generateTreeMap(InputJsonTree=None):
                 horizontal_align="right",
                 vertical_align="middle",
             ),
-            initial_tree_depth=2
+            initial_tree_depth=4
         )
     )
     return c
