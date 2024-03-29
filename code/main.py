@@ -13,8 +13,10 @@ from backend.drawCluster import draw
 from backend.Generate_Topo import generate_topo, reconstructLinks
 from backend.Generate_Radar_data import *
 from backend.Generate_Tree import MetaACT
+from backend.equipment_message import *
 import argparse
 ACT = MetaACT()
+EquipmentMes = EquipmentMessage()
 app = Flask(__name__, template_folder=frontEndPath, static_folder=frontEndPath)  # 创建Flask应用实例，配置模板和静态文件路径
 app.config["SECRET_KEY"] = "ABCDFWA"  # 配置Flask应用的密钥
 
@@ -34,28 +36,26 @@ def detailPage(equipment):
     - 渲染后的设备详情页面。
     """
     # 初始化设备详情信息
-    Topo = generate_topo()
-    equipment_id = int(equipment.replace("node", ""))
-    equipment_name = equipment
-
+    Topo = generate_topo()  # 生成设备拓扑信息
+    equipment_id = int(equipment.replace("node", ""))  # 从设备名称中提取设备ID
+    equipment_name = equipment  # 保存设备名称
+    ACT.Sample_neg2Nodes_id(sum(ord(char) for char in equipment))  # 初始化设备ACT树
     # 计算设备拓扑重要度排名比例
-    importance = [i['symbolSize'] for i in Topo['nodes']]
-    great = 0
+    importance = [i['symbolSize'] for i in Topo['nodes']]  # 提取所有节点的重要性指标
+    great = 0  # 初始化设备在排名中的位置
     for index, i in enumerate(importance):
-        if Topo['nodes'][equipment_id - 1]['symbolSize'] < i:
+        if Topo['nodes'][equipment_id - 1]['symbolSize'] < i:  # 检查当前设备的重要性指标是否小于其他节点
             great += 1
 
-    percentage_of_equipment = 1 - great/len(importance)
+    percentage_of_equipment = 1 - great/len(importance)  # 计算设备的重要性比例
 
-    equipment_detail_name = "equipment_detail_name"
-    equipment_detail_type = "equipment_detail_type"
-    equipment_detail_status = "equipment_detail_status"
-    equipment_protection_advise = 'equipment_protection_advise'
-
-    # Topo['nodes'][equipment_id-1]['symbolSize']
+    # 初始化设备详情面板的内容
+    equipment_detail_name = EquipmentMes.equipment_name[equipment_id]
+    equipment_detail_type = EquipmentMes.equipment_type[equipment_id]
+    equipment_detail_status = EquipmentMes.equipment_status[equipment_id]
+    equipment_protection_advise = EquipmentMes.equipment_suggestion[equipment_id]
 
     # 生成各种图表
-    ACT.Sample_neg2Nodes_id(sum(ord(char) for char in equipment))
     TreeMap = generateTreeMap(ACT.format_json_tree_sample)
     mult = generate_muti(
         X=ACT.format_batList_sample_leaf_nodes,
