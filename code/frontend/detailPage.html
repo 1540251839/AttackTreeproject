@@ -20,14 +20,18 @@
     <!-- 主容器，包含页面的主要布局 -->
     <div class="main clearfix">
         <div class="main-left">
-            <div class="menu" style="display: flex; flex-direction: column; align-items: center; max-height: 90vh; overflow-y: auto;">
-                <button style="width: 100%; height: 10vh; text-align: center; margin: 1vh; background-image: linear-gradient(to right, #aeeeee, #4990e2);" onclick="location.href='/';">menu</button>
+            <div class="menu"
+                 style="display: flex; flex-direction: column; align-items: center; max-height: 90vh; overflow-y: auto;">
+                <button style="width: 100%; height: 10vh; text-align: center; margin: 1vh; background-image: linear-gradient(to right, #aeeeee, #4990e2);"
+                        onclick="location.href='/';">menu
+                </button>
                 {% for node in graph_nodes %}
-                    <button style="width: 100%; height: 10vh; text-align: center; margin: 1vh; background-image: linear-gradient(to right, #3062f2, #7f49e2);" onclick="location.href='/detail/{{ node.name }}';">{{ node.name }}</button>
+                <button style="width: 100%; height: 10vh; text-align: center; margin: 1vh; background-image: linear-gradient(to right, #3062f2, #7f49e2);"
+                        onclick="location.href='/detail/{{ node.name }}';">{{ node.name }}
+                </button>
                 {% endfor %}
             </div>
         </div>
-
 
 
         <!-- 中部栏，展示故障设备区域分布情况和故障时段分布 -->
@@ -48,12 +52,12 @@
                     </div>
                     <div class="detail_section">
                         <h3>设备防护建议</h3>
-                        <p>{{equipment_protection_advise}}</p>
+                        <p id="typing-effect" style="color: white"></p>
                     </div>
                 </div>
                 <div class="liquid_graph">
                     <div style="text-align: left;color: white;font-size: 2vh">
-                    该设备拓扑重要度排名比例
+                        该设备拓扑重要度排名比例
                     </div>
                     {{ liquid|safe }}
                 </div>
@@ -93,5 +97,44 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/echarts.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/new_file.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/maps.js') }}"></script>
+<script>    function typeWriter(element, text, index, interval) {
+    if (index < text.length) {
+        element.innerHTML += text.charAt(index);
+        setTimeout(function () {
+            typeWriter(element, text, index + 1, interval);
+        }, interval);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const text = "{{ equipment_protection_advise }}".replace(/\[newline\]/g, '\n');
+    const typingElement = document.getElementById('typing-effect');
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function typeWriter(element, text, index, interval) {
+        if (index < text.length) {
+            setTimeout(function () {
+                let char = text[index];
+                // 如果是换行符，则插入<p>标签以实现换行（视实际场景需求调整）
+                if (char === '\n') {
+                    element.innerHTML += '<br>';
+                } else {
+                    element.innerHTML += char;
+                }
+
+                typeWriter(element, text, index + 1, getRandomInt(5, 60));
+            }, interval);
+        }
+    }
+
+    // 首先确保'[newline]'已被替换为'\n'
+    typeWriter(typingElement, text.replace(/\[newline\]/g, '\n'), 0, 0);
+});
+
+
+</script>
 </body>
 </html>

@@ -482,6 +482,21 @@ a:active {
     width: 40%;
 }
 
+.equipment_detail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: left;
+    margin-top: 10px;
+    padding: 15px; /* 添加内边距以增加内容区域空间 */
+    border: 2px solid rgba(40, 171, 194, 0.8); /* 使用半透明颜色和更宽的边框 */
+    border-radius: 8px; /* 添加圆角以美化边框样式 */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 添加微妙阴影效果 */
+    height: 40vh;
+    width: 60%;
+    overflow: auto;
+}
+
 /*google滚动条样式*/
 
 ::-webkit-scrollbar {

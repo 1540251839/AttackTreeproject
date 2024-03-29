@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
     <meta name="renderer" content="webkit">
-    <title>MainPage</title>
+    <title>MDNTDP α</title>
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.4.4.min.js') }}"></script>
@@ -12,16 +12,13 @@
     <style>
         .border-container.containerbottom {
             position: relative; /* 添加此行以支持子元素绝对定位 */
-
         }
-
-
     </style>
 </head>
 <body>
 <div class="background">
     <div class="header1">
-        <h1>MainPage</h1>
+        <h1>多设备网络威胁态势检测平台 (version α)</h1>
     </div>
     <!--主体-->
     <!-- 主容器，包含页面的主要布局 -->
@@ -49,12 +46,14 @@
                 <div class="name-title tile-size-color">
                     查看各节点细节
                 </div>
-                                <div class="AIReport" style="height: 55%;top: 60%">
+                <div class="AIReport" style="height: 55%;top: 60%">
                     <!-- 假设我们有一个包含所有节点按钮的div -->
                     <div class="node-buttons-container">
                         {% for node in graph_nodes %}
                         <!-- 使用 Django 模板语法来遍历节点，生成按钮并添加点击事件，跳转到相应路由 -->
-                        <button class="node-button" data-node="{{ node.name }}" onclick="location.href='/detail/{{ node.name }}';">{{ node.name }}</button>
+                        <button class="node-button" data-node="{{ node.name }}"
+                                onclick="location.href='/detail/{{ node.name }}';">{{ node.name }}
+                        </button>
                         {% endfor %}
                     </div>
                 </div>
